@@ -45,13 +45,66 @@ public abstract class BaseClass
 
     public void Logout() => ClickElement(logout);
 
-    protected bool IsElementVisible(By element)
+    //-------------> <--------------//
+    protected bool IsElementVisible(By by)
+    {
+        try
+        {
+            return BrowserEnvironment.Driver.FindElement(by).Displayed;
+        }
+        catch (NoSuchElementException)
+        {
+            return false;
+        }
+        catch (StaleElementReferenceException)
+        {
+            return false;
+        }
+    }
+
+    protected bool IsElementClickable(By by)
+    {
+        try
+        {
+            return BrowserEnvironment.Driver.FindElement(by).Enabled;
+        }
+        catch (NoSuchElementException)
+        {
+            return false;
+        }
+        catch (StaleElementReferenceException)
+        {
+            return false;
+        }
+    }
+
+    protected bool HasElementTextChanged(By by, string text)
+    {
+        try
+        {
+            return BrowserEnvironment.Driver.FindElement(by).Text == text;
+        }
+        catch (NoSuchElementException)
+        {
+            return false;
+        }
+        catch (StaleElementReferenceException)
+        {
+            return false;
+        }
+    }
+
+    protected bool WaitForElementToBeVisible(By by)
     {
         try
         {
             return new WebDriverWait(BrowserEnvironment.Driver, TimeSpan.FromSeconds(10))
-            .Until(ExpectedConditions.ElementIsVisible(element)).Displayed;
+                .Until((condition) =>
+                {
+                    ExpectedConditions.ElementIsVisible(by);
 
+                    return true;
+                });
         }
         catch (WebDriverTimeoutException)
         {
@@ -59,7 +112,7 @@ public abstract class BaseClass
         }
     }
 
-    protected bool IsElementClickable(IWebElement element)
+    protected bool WaitForElementToBeClickable(IWebElement element)
     {
         try
         {
@@ -74,7 +127,39 @@ public abstract class BaseClass
         }
     }
 
-    protected bool HasElementTextChanged(IWebElement element)
+    protected bool WaitForElementTextToChange(IWebElement element, string text)
+    {
+        try
+        {
+            return new WebDriverWait(BrowserEnvironment.Driver, TimeSpan.FromSeconds(10))
+                .Until(ExpectedConditions.TextToBePresentInElement(element, text));
+        }
+        catch (WebDriverTimeoutException) 
+        {
+            return false;
+        }
+    }
+
+    //-------------------> Implement//
+    protected bool WaitForElementToBeNotVisible(By by)
+    {
+        try
+        {
+            return new WebDriverWait(BrowserEnvironment.Driver, TimeSpan.FromSeconds(10))
+                .Until((condition) =>
+                {
+                    ExpectedConditions.ElementIsVisible(by);
+
+                    return true;
+                });
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
+    }
+
+    protected bool WaitForElementToBeNotClickable(IWebElement element)
     {
         try
         {
@@ -88,7 +173,7 @@ public abstract class BaseClass
             return false;
         }
     }
-
+    //Implement<---------------//
     internal void SwitchToFrame(IWebElement frame)
     {
         BrowserEnvironment.Driver.SwitchTo().Frame(frame);
@@ -99,19 +184,10 @@ public abstract class BaseClass
         BrowserEnvironment.Driver.SwitchTo().DefaultContent(); ;
     }
 
-    protected bool ValidateDropdownOptions(IWebElement dropdownElement, IEnumerable<string> expectedOptions)
+    internal bool ValidateDropdownOptions(IWebElement dropdownElement, IEnumerable<string> expectedOptions)
     {
         SelectElement dropdown = new SelectElement(dropdownElement);
 
         return expectedOptions.Count() == dropdown.Options.Count ? dropdown.Options.Select(option => option.Text).Except(expectedOptions).Any() : false;
-
-        //if (expectedOptions.Count() != dropdown.Options.Count)
-        //{
-        //    return false;
-        //}
-
-        //var actualOptions = dropdown.Options.Select(option => option.Text);
-
-        //return actualOptions.Except(expectedOptions).Any();
     }
 }
