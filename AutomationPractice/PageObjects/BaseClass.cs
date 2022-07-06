@@ -45,7 +45,6 @@ public abstract class BaseClass
 
     public void Logout() => ClickElement(logout);
 
-    //-------------> <--------------//
     protected bool IsElementVisible(By by)
     {
         try
@@ -140,7 +139,6 @@ public abstract class BaseClass
         }
     }
 
-    //-------------------> Implement//
     protected bool WaitForElementToBeNotVisible(By by)
     {
         try
@@ -148,7 +146,7 @@ public abstract class BaseClass
             return new WebDriverWait(BrowserEnvironment.Driver, TimeSpan.FromSeconds(10))
                 .Until((condition) =>
                 {
-                    ExpectedConditions.ElementIsVisible(by);
+                    ExpectedConditions.InvisibilityOfElementLocated(by);
 
                     return true;
                 });
@@ -158,22 +156,27 @@ public abstract class BaseClass
             return false;
         }
     }
-
-    protected bool WaitForElementToBeNotClickable(IWebElement element)
+ 
+    protected bool WaitForElementToBeNotClickable(By by)
     {
         try
         {
-            new WebDriverWait(BrowserEnvironment.Driver, TimeSpan.FromSeconds(10))
-                .Until(ExpectedConditions.ElementToBeClickable(element));
-
-            return true;
+            return new WebDriverWait(BrowserEnvironment.Driver, TimeSpan.FromSeconds(10))
+                .Until((IWebDriver driver) =>
+                {
+                    if (!driver.FindElement(by).Enabled)
+                    {
+                        return true;
+                    } 
+                    return false;
+                });
         }
         catch (WebDriverTimeoutException)
         {
             return false;
         }
     }
-    //Implement<---------------//
+
     internal void SwitchToFrame(IWebElement frame)
     {
         BrowserEnvironment.Driver.SwitchTo().Frame(frame);
