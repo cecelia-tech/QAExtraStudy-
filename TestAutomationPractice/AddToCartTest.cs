@@ -28,7 +28,7 @@ public class AddToCartTest : TestBaseClass
         Assert.AreEqual(cartPage.CountProductsInTheCart(), expectedNumberOfItemsInTheCart, "Cart page was not loaded");
     }
 
-    [Test, Order(3)]
+    [Test, Order(4)]
     public void TestTotalOfTheCart()
     {
         var expectedCartTotal = 107.97;

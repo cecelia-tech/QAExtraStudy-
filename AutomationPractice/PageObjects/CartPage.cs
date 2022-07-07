@@ -7,7 +7,6 @@ namespace AutomationPractice.PageObjects;
 
 public class CartPage : BaseClass, ILoad<CartPage>
 {
-    private const string URL = "http://automationpractice.com/index.php?controller=order";
     [FindsBy(How = How.Id, Using = "total_price")]
     private IWebElement totalPrice;
     private By productsInTheCart = By.XPath("//tr[contains(@id, 'product')]");
@@ -36,7 +35,12 @@ public class CartPage : BaseClass, ILoad<CartPage>
 
     public CartPage LoadPage()
     {
-        BrowserEnvironment.LoadApplication(URL);
+        BrowserEnvironment.LoadApplication(URLs.CART_PAGE);
         return Page.CartPage;
+    }
+
+    internal override bool AssertLocation()
+    {
+        return BrowserEnvironment.Driver.Url.Equals(URLs.CART_PAGE);
     }
 }

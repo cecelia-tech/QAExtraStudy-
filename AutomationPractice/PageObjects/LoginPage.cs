@@ -8,7 +8,6 @@ namespace AutomationPractice;
 
 public class LoginPage : BaseClass, ILoad<LoginPage>
 {
-    private const string URL = "http://automationpractice.com/index.php?controller=authentication&back=my-account";
     [FindsBy(How = How.Id, Using = "email_create")]
     private IWebElement createAccountEmailInput;
     [FindsBy(How = How.Id, Using = "SubmitCreate")]
@@ -69,7 +68,7 @@ public class LoginPage : BaseClass, ILoad<LoginPage>
 
     public LoginPage LoadPage()
     {
-        BrowserEnvironment.LoadApplication(URL);
+        BrowserEnvironment.LoadApplication(URLs.LOGIN_PAGE);
         return Page.Login;
     }
 
@@ -84,5 +83,10 @@ public class LoginPage : BaseClass, ILoad<LoginPage>
         {
             return false;
         }
+    }
+
+    internal override bool AssertLocation()
+    {
+        return BrowserEnvironment.Driver.Url.Equals(URLs.LOGIN_PAGE);
     }
 }

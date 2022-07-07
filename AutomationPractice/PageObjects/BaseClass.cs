@@ -13,6 +13,8 @@ public abstract class BaseClass
     [FindsBy(How = How.ClassName, Using = "logout")]
     private IWebElement logout;
     
+    internal abstract bool AssertLocation();
+
     protected void SetInputValue(IWebElement element, string? value)
     {
         element.Clear();
