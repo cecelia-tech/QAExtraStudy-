@@ -12,11 +12,14 @@ public class TestBaseClass
     private const string SAUCE_LABS_PLATDORM = "saucelabs";
     private const string CHROME_BROWSER = "chrome";
     private const string FIREFOX_BROWSER = "firefox";
+    protected string email = DataFromFile.GetElementValue("email");
+    protected string password = DataFromFile.GetElementValue("password");
 
     [OneTimeSetUp]
     public void Setup()
     {
         BrowserEnvironment.SetEnvironment(LOCAL_PLATFORM, CHROME_BROWSER);
+        BrowserEnvironment.Driver.Manage().Window.Maximize();
     }
 
     [TearDown]
