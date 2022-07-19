@@ -7,7 +7,6 @@ namespace AutomationPractice.PageObjects;
 
 public class ProductPage : BaseClass, ILoad<ProductPage>
 {
-    private const string URL = "http://automationpractice.com/index.php?id_product=7&controller=product";
     [FindsBy(How = How.Id, Using = "wishlist_button")]
     private IWebElement wishListLink;
 
@@ -26,7 +25,7 @@ public class ProductPage : BaseClass, ILoad<ProductPage>
 
     public ProductPage LoadPage()
     {
-        BrowserEnvironment.LoadApplication(URL);
+        BrowserEnvironment.LoadApplication(URLs.PRODUCT_PAGE);
         return Page.ProductPage;
     }
 
@@ -38,5 +37,10 @@ public class ProductPage : BaseClass, ILoad<ProductPage>
             .Until(ExpectedConditions.ElementIsVisible(By.CssSelector("a[title='Close']"))).Click();
 
         return Page.ProductPage;
+    }
+
+    internal override bool AssertLocation()
+    {
+        return BrowserEnvironment.Driver.Url.Equals(URLs.PRODUCT_PAGE);
     }
 }

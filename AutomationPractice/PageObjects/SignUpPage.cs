@@ -8,7 +8,6 @@ namespace AutomationPractice;
 
 public class SignUpPage : BaseClass, ILoad<SignUpPage>
 {
-    private const string URL = "http://automationpractice.com/index.php?controller=authentication&back=my-account#account-creation";
     private By signUpForm = By.Id("account-creation_form");
     [FindsBy(How = How.Id, Using = "customer_firstname")]
     private IWebElement personalInfoFirstNameInputLocator;
@@ -59,7 +58,7 @@ public class SignUpPage : BaseClass, ILoad<SignUpPage>
 
     public SignUpPage LoadPage()
     {
-        BrowserEnvironment.LoadApplication(URL);
+        BrowserEnvironment.LoadApplication(URLs.SIGNUP_PAGE);
         return Page.SignUp;
     }
 
@@ -74,5 +73,10 @@ public class SignUpPage : BaseClass, ILoad<SignUpPage>
         {
             return false;
         }
+    }
+
+    internal override bool AssertLocation()
+    {
+        return BrowserEnvironment.Driver.Url.Equals(URLs.SIGNUP_PAGE);
     }
 }

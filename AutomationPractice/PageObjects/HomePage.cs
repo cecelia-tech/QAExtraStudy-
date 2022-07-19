@@ -6,7 +6,6 @@ namespace AutomationPractice.PageObjects;
 
 public class HomePage : BaseClass, ILoad<HomePage>
 {
-    private const string URL = "http://automationpractice.com/index.php?id_category=8&controller=category";
     private By signInButton = By.ClassName("login");
 
     public bool IsPageLoaded()
@@ -24,7 +23,12 @@ public class HomePage : BaseClass, ILoad<HomePage>
 
     public HomePage LoadPage()
     {
-        BrowserEnvironment.LoadApplication(URL);
+        BrowserEnvironment.LoadApplication(URLs.HOME_PAGE);
         return Page.HomePage;
+    }
+
+    internal override bool AssertLocation()
+    {
+        return BrowserEnvironment.Driver.Equals(URLs.HOME_PAGE);
     }
 }

@@ -7,7 +7,6 @@ namespace AutomationPractice.PageObjects;
 
 public class WishListsPage : BaseClass, ILoad<WishListsPage>
 {
-    const string WISHLIST_URL = "http://automationpractice.com/index.php?fc=module&module=blockwishlist&controller=mywishlist";
     [FindsBy(How = How.Id, Using = "name")]
     private IWebElement myWishListInput;
     [FindsBy(How =How.Id, Using = "submitWishlist")]
@@ -106,7 +105,7 @@ public class WishListsPage : BaseClass, ILoad<WishListsPage>
 
     public WishListsPage LoadPage()
     {
-        BrowserEnvironment.LoadApplication(WISHLIST_URL);
+        BrowserEnvironment.LoadApplication(URLs.WISHLIST_PAGE);
         return Page.WishLists;
     }
 
@@ -121,5 +120,10 @@ public class WishListsPage : BaseClass, ILoad<WishListsPage>
         {
             return false;
         }
+    }
+
+    internal override bool AssertLocation()
+    {
+        return BrowserEnvironment.Driver.Url.Equals(URLs.WISHLIST_PAGE);
     }
 }
